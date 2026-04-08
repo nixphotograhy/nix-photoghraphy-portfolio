@@ -80,8 +80,6 @@ export default function PremiumFooter({ contactInfo, socialLinks }: PremiumFoote
         <p>© {currentYear} Nix Studio — All Rights Reserved.</p>
         <p className="hidden md:block">Curated Design By Nix & Co.</p>
         <div className="flex items-center gap-12">
-            <span>Privat_01</span>
-            <span>Terms_02</span>
         </div>
       </div>
     </footer>

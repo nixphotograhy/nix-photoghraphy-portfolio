@@ -80,8 +80,8 @@ export default function MasonryGrid({ images = [], title = "ARCHIVES", isLightbo
                 }}
                 className="object-cover transition-opacity duration-700"
               />
-              {/* Tonal Overlay */}
-              <div className="absolute inset-0 bg-forest-deep mix-blend-multiply opacity-10 group-hover:opacity-0 transition-opacity" />
+              {/* Tonal Overlay - Removed for clarity */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-0 transition-opacity" />
               
               {/* Detail Info Overlay - Elite Beast Refinement for Mobile */}
               <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-obsidian/90 via-obsidian/40 to-transparent">
