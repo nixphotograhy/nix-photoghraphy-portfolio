@@ -19,7 +19,6 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
   })
 
   // Fluid viewport-based parallax shifts to scale perfectly on mobile and desktop
-  // Linear progression ensures identical spacing between steps
   const y1 = useTransform(scrollYProgress, [0, 1], ["0vw", "-5vw"])
   const y2 = useTransform(scrollYProgress, [0, 1], ["0vw", "-15vw"])
   const y3 = useTransform(scrollYProgress, [0, 1], ["0vw", "-25vw"])
@@ -40,15 +39,9 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y1 }}
             viewport={{ once: true }}
-            className="relative z-10 w-[80%] md:w-[40%] lg:w-[38%] self-start flex flex-col gap-4 md:gap-12"
+            className="relative z-10 w-[80%] md:w-[40%] lg:w-[38%] self-start flex flex-col gap-4 md:gap-12 mt-12 md:mt-0"
           >
-            <div className="flex items-end gap-6 text-cream/40">
-                <span className="text-4xl md:text-6xl font-serif italic leading-none">01</span>
-                <span className="text-[10px] uppercase font-sans tracking-[0.4em] mb-2 font-bold">Archetype Focus</span>
-                <div className="h-[1px] flex-grow bg-white/5 mb-3" />
-            </div>
-
-            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group cursor-none">
+            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group">
               {/* Corner Architectural Marks */}
               <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -74,15 +67,9 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y2 }}
             viewport={{ once: true }}
-            className="relative z-20 w-[80%] md:w-[40%] lg:w-[38%] self-center -mt-12 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
+            className="relative z-20 w-[80%] md:w-[40%] lg:w-[38%] self-center -mt-8 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
           >
-            <div className="flex items-end gap-6 text-cream/40 px-4">
-                <div className="h-[1px] flex-grow bg-white/5 mb-3" />
-                <span className="text-[10px] uppercase font-sans tracking-[0.4em] mb-2 font-bold">Studio Archive</span>
-                <span className="text-4xl md:text-6xl font-serif italic leading-none">02</span>
-            </div>
-
-            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-[0_60px_120px_rgba(0,0,0,0.6)] group cursor-none">
+            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-[0_60px_120px_rgba(0,0,0,0.6)] group">
                {/* Corner Architectural Marks */}
                <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
                <div className="absolute bottom-4 left-4 w-2 h-2 border-b border-l border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -108,15 +95,9 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y3 }}
             viewport={{ once: true }}
-            className="relative z-10 w-[80%] md:w-[40%] lg:w-[38%] self-end -mt-12 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
+            className="relative z-10 w-[80%] md:w-[40%] lg:w-[38%] self-end -mt-8 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
           >
-            <div className="flex items-end gap-6 text-cream/40">
-                <span className="text-4xl md:text-5xl font-serif italic leading-none">03</span>
-                <span className="text-[10px] uppercase font-sans tracking-[0.4em] mb-2 font-bold">Core Narrative</span>
-                <div className="h-[1px] flex-grow bg-white/5 mb-3" />
-            </div>
-
-            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group cursor-none">
+            <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group">
                {/* Corner Architectural Marks */}
                <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
                <div className="absolute bottom-4 right-4 w-2 h-2 border-b border-r border-white/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity" />

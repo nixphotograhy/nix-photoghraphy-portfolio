@@ -5,7 +5,8 @@ import { gallery } from './gallery'
 import { quoteSection } from './quoteSection'
 import { philosophySection } from './philosophySection'
 import { siteSettings } from './siteSettings'
+import { videoClip } from './videoClip'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [homePage, gallery, quoteSection, philosophySection, siteSettings],
+  types: [homePage, gallery, quoteSection, philosophySection, siteSettings, videoClip],
 }

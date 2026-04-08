@@ -33,10 +33,14 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Nix Photography",
-    description: "Docutorial Narratives by Nix.",
+    description: "Docutorial Narratives by Nix. Professional cinematic photography.",
+    creator: "@nix_photography_09",
   },
   icons: {
     icon: "/favicon.ico",
+  },
+  alternates: {
+    canonical: "https://www.nixphotography.in",
   }
 };
 
@@ -48,6 +52,32 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-obsidian">
       <body className={`${cormorantGaramond.variable} ${outfit.variable} font-sans text-cream antialiased selection:bg-forest-light selection:text-obsidian`}>
+        {/* Structured Data: PhotographyBusiness */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "PhotographyBusiness",
+              "name": "Nix Photography",
+              "image": "https://www.nixphotography.in/logo.png",
+              "@id": "https://www.nixphotography.in",
+              "url": "https://www.nixphotography.in",
+              "telephone": "",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Mumbai",
+                "addressRegion": "MH",
+                "addressCountry": "IN"
+              },
+              "sameAs": [
+                "https://www.instagram.com/nix_photography_09"
+              ],
+              "priceRange": "$$$"
+            })
+          }}
+        />
+        
         {/* Safe Cinematic Overlays (Excluded from Sanity Studio) */}
         <CinematicOverlays />
         

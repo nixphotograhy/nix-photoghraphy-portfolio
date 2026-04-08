@@ -78,11 +78,11 @@ export default function NavigationHUD() {
             {/* Bold Mobile Toggle: Ensuring visibility on all devices */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)} 
-              className="flex flex-col gap-1.5 w-7 group cursor-none flex-shrink-0"
+              className="flex flex-col gap-1.5 w-10 h-10 items-end justify-center group flex-shrink-0 relative z-[70]"
               aria-label="Toggle Menu"
             >
-              <div className="h-[2px] w-full bg-white transition-all duration-300 group-hover:bg-forest-light" />
-              <div className="h-[1px] w-full bg-white/60 transition-all duration-300 group-hover:bg-forest-light" />
+              <div className="h-[2px] w-7 bg-white transition-all duration-300 group-hover:bg-forest-light" />
+              <div className="h-[1px] w-5 bg-white/60 transition-all duration-300 group-hover:bg-forest-light" />
             </button>
           </div>
         </div>

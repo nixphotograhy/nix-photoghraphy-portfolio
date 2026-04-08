@@ -21,22 +21,31 @@ export default function Preloader() {
 
     if (pathname?.startsWith('/studio')) return
 
+    // Elite Beast: Session-based loading logic
+    const hasVisited = sessionStorage.getItem('nix_visited')
+    if (hasVisited) {
+      setPercent(100)
+      return
+    }
+
     // Faster interval and larger increments for a snappy, non-chopy feel
     const interval = setInterval(() => {
       setPercent(prev => {
-        const next = prev + Math.floor(Math.random() * 20) + 10
+        const next = prev + Math.floor(Math.random() * 25) + 15
         if (next >= 100) {
           clearInterval(interval)
+          sessionStorage.setItem('nix_visited', 'true')
           return 100
         }
         return next
       })
-    }, 80) // Reduced from 150 to 80 for faster feedback
+    }, 60) // Even faster for Elite performance
 
-    // Safety Escape: Force load completion if it takes more than 3.5 seconds
+    // Safety Escape: Force load completion if it takes more than 2 seconds
     const timeout = setTimeout(() => {
       setPercent(100)
-    }, 3500)
+      sessionStorage.setItem('nix_visited', 'true')
+    }, 2000)
 
     return () => {
       clearInterval(interval)

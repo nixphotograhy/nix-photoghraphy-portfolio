@@ -57,7 +57,7 @@ export default function MasonryGrid({ images = [], title = "ARCHIVES", isLightbo
           {title}
         </h2>
         <span className="text-forest-light tracking-[0.2em] uppercase text-[9px] md:text-xs font-sans text-left sm:text-right">
-          Collection 2026 <span className="sm:hidden">|</span><br className="hidden sm:block"/> &mdash; {images.length} Frames
+          Collection 2026 <span className="sm:hidden">|</span><br className="hidden sm:block"/> &mdash; {images.length} {images.length === 1 ? 'Frame' : 'Frames'}
         </span>
       </div>
 
@@ -83,17 +83,17 @@ export default function MasonryGrid({ images = [], title = "ARCHIVES", isLightbo
               {/* Tonal Overlay */}
               <div className="absolute inset-0 bg-forest-deep mix-blend-multiply opacity-10 group-hover:opacity-0 transition-opacity" />
               
-              {/* Detail Info Overlay */}
-              <div className="absolute inset-x-0 bottom-0 p-8 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-obsidian/80 to-transparent">
-                <p className="text-[10px] uppercase font-sans tracking-[0.4em] text-forest-light mb-1">
+              {/* Detail Info Overlay - Elite Beast Refinement for Mobile */}
+              <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-gradient-to-t from-obsidian/90 via-obsidian/40 to-transparent">
+                <p className="text-[8px] md:text-[10px] uppercase font-sans tracking-[0.4em] text-forest-light mb-1">
                   Collection {image.projectTitle || 'Editorial'}
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-cream text-lg font-serif italic">Frame {index + 1}</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <span className="text-cream text-sm md:text-lg font-serif italic">Frame {index + 1}</span>
                   {isLightboxEnabled ? (
                     <Maximize2 size={16} className="text-cream/40" />
                   ) : image.slug && (
-                    <span className="text-[8px] uppercase font-sans tracking-[0.3em] text-white bg-white/10 px-2 py-1 rounded-full">
+                    <span className="text-[7px] md:text-[8px] uppercase font-sans tracking-[0.3em] text-white bg-white/10 px-3 py-2 rounded-full w-fit self-start sm:self-auto border border-white/5">
                       View Project
                     </span>
                   )}

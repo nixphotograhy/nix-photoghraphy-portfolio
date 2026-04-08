@@ -95,3 +95,16 @@ export const philosophyQuery = groq`*[_type == "philosophySection"][0]{
   },
   focusAreas
 }`
+
+// Fetch cinematic narrative video clips
+export const videoClipsQuery = groq`*[_type == "videoClip"] | order(_createdAt desc)[0...5]{
+  _id,
+  title,
+  category,
+  "videoUrl": videoFile.asset->url,
+  previewImage {
+    asset->,
+    hotspot,
+    crop
+  }
+}`

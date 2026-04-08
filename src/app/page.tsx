@@ -1,11 +1,12 @@
 import { client } from '@/sanity/lib/client'
-import { homePageQuery, galleriesQuery, quoteQuery, philosophyQuery, siteSettingsQuery } from '@/sanity/lib/queries'
+import { homePageQuery, galleriesQuery, quoteQuery, philosophyQuery, siteSettingsQuery, videoClipsQuery } from '@/sanity/lib/queries'
 
 import EditorialHero from '@/components/EditorialHero'
 import MasonryGrid from '@/components/MasonryGrid'
 import FilmStripGallery from '@/components/FilmStripGallery'
 import PhilosophySection from '@/components/PhilosophySection'
 import StaircaseGallery from '@/components/StaircaseGallery'
+import CinematicNarrative from '@/components/CinematicNarrative'
 import BookingCTA from '@/components/BookingCTA'
 import PremiumFooter from '@/components/PremiumFooter'
 
@@ -13,12 +14,13 @@ export const revalidate = 60 // Revalidate data every 60 seconds
 
 export default async function Home() {
   // Fetch data in parallel for high performance
-  const [homeData, galleries, quoteData, philosophyData, siteSettings] = await Promise.all([
+  const [homeData, galleries, quoteData, philosophyData, siteSettings, videoClips] = await Promise.all([
     client.fetch(homePageQuery),
     client.fetch(galleriesQuery),
     client.fetch(quoteQuery),
     client.fetch(philosophyQuery),
-    client.fetch(siteSettingsQuery)
+    client.fetch(siteSettingsQuery),
+    client.fetch(videoClipsQuery)
   ])
 
   return (
@@ -36,6 +38,9 @@ export default async function Home() {
       <FilmStripGallery 
         images={homeData?.filmStripImages} 
       />
+
+      {/* 2.5 THE CINEMATIC NARRATIVE : Editorial Video Reels (New) */}
+      <CinematicNarrative clips={videoClips} />
 
       {/* 3. THE STAIRCASE : Staggered Editorial Showcase (New Section) */}
       <StaircaseGallery 
