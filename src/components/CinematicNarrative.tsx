@@ -126,7 +126,7 @@ export default function CinematicNarrative({ clips = [] }: CinematicNarrativePro
   if (!clips || clips.length === 0) return null
 
   return (
-    <section id="reels" className="bg-obsidian py-24 md:py-32 px-0 overflow-hidden relative scroll-mt-24 md:scroll-mt-32">
+    <section id="reels" className="bg-obsidian pt-16 pb-32 px-0 overflow-hidden relative scroll-mt-20 md:scroll-mt-28">
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-forest-deep/10 rounded-full blur-[120px] pointer-events-none" />
       
