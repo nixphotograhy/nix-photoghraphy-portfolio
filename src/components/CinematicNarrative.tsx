@@ -126,14 +126,14 @@ function ReelCard({
         )}
       </AnimatePresence>
 
-      {/* Main Video Element - preload="none" stops bandwidth hogging */}
+      {/* Main Video Element - preload="metadata" buffers headers for instant play start */}
       <video
         ref={videoRef}
         src={clip.videoUrl}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
         loop
         playsInline
-        preload="none"
+        preload="metadata"
       />
 
       {/* Volume Toggle HUD */}
