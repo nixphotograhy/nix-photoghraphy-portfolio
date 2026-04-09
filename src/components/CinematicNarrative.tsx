@@ -19,61 +19,74 @@ interface CinematicNarrativeProps {
   clips: VideoClip[]
 }
 
-function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
+function ReelCard({ 
+  clip, 
+  index,
+  activeAudioId,
+  activeVideoId,
+  onAudioToggle,
+  onPlayToggle
+}: { 
+  clip: VideoClip; 
+  index: number;
+  activeAudioId: string | null;
+  activeVideoId: string | null;
+  onAudioToggle: (id: string, isMuting: boolean) => void;
+  onPlayToggle: (id: string, isPlaying: boolean) => void;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(true)
   const [hasError, setHasError] = useState(false)
 
-  // Sync muted state with video element
+  // Derived state based on global mutual exclusion
+  const isPlaying = activeVideoId === clip._id
+  const isMuted = activeAudioId !== clip._id
+
+  // Control Playback
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(() => setHasError(true))
+      } else {
+        videoRef.current.pause()
+      }
+    }
+  }, [isPlaying])
+
+  // Control Audio
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = isMuted
+      // For iOS Safari explicit binding if unmuting while playing
+      if (!isMuted && isPlaying) {
+        videoRef.current.play().catch(() => setHasError(true))
+      }
     }
-  }, [isMuted])
+  }, [isMuted, isPlaying])
 
   const handleMouseEnter = () => {
     if (typeof window !== 'undefined' && window.innerWidth > 768) {
-      videoRef.current?.play().catch(() => setHasError(true))
-      setIsPlaying(true)
+      onPlayToggle(clip._id, true)
     }
   }
 
   const handleMouseLeave = () => {
     if (typeof window !== 'undefined' && window.innerWidth > 768) {
-      videoRef.current?.pause()
+      onPlayToggle(clip._id, false)
       if (videoRef.current) videoRef.current.currentTime = 0
-      setIsPlaying(false)
+      onAudioToggle(clip._id, true) // ensure it mutes when leaving
     }
   }
 
   const handleToggle = (e: React.MouseEvent) => {
-    // On mobile or on click, toggle play/pause
+    onPlayToggle(clip._id, !isPlaying)
     if (isPlaying) {
-      videoRef.current?.pause()
-      setIsPlaying(false)
-    } else {
-      videoRef.current?.play().catch(() => setHasError(true))
-      setIsPlaying(true)
+      onAudioToggle(clip._id, true) // auto-mute if paused manually
     }
   }
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation() 
-    const newMutedState = !isMuted
-    setIsMuted(newMutedState)
-    
-    // Explicit DOM binding for iOS Safari
-    if (videoRef.current) {
-      videoRef.current.muted = newMutedState
-      if (!newMutedState && isPlaying) {
-        // iOS sometimes requires play() to be explicitly called again after unmuting
-        const playPromise = videoRef.current.play()
-        if (playPromise !== undefined) {
-          playPromise.catch(() => setHasError(true))
-        }
-      }
-    }
+    onAudioToggle(clip._id, !isMuted)
   }
 
   return (
@@ -113,13 +126,14 @@ function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
         )}
       </AnimatePresence>
 
-      {/* Main Video Element */}
+      {/* Main Video Element - preload="none" stops bandwidth hogging */}
       <video
         ref={videoRef}
         src={clip.videoUrl}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
         loop
         playsInline
+        preload="none"
       />
 
       {/* Volume Toggle HUD */}
@@ -159,6 +173,22 @@ function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
 
 export default function CinematicNarrative({ clips = [] }: CinematicNarrativeProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  
+  // Mutual Exclusion State
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null)
+  const [activeAudioId, setActiveAudioId] = useState<string | null>(null)
+
+  const handlePlayToggle = (id: string, isPlaying: boolean) => {
+    setActiveVideoId(isPlaying ? id : null)
+    // If playing a new video, ensure only it has audio active if there was overlapping audio
+    if (isPlaying && activeAudioId && activeAudioId !== id) {
+       setActiveAudioId(null) // mute the old one
+    }
+  }
+
+  const handleAudioToggle = (id: string, isMuting: boolean) => {
+    setActiveAudioId(isMuting ? null : id)
+  }
 
   if (!clips || clips.length === 0) return null
 
@@ -190,7 +220,15 @@ export default function CinematicNarrative({ clips = [] }: CinematicNarrativePro
         className="flex gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 lg:px-24 pb-12 cursor-grab active:cursor-grabbing no-scrollbar snap-x snap-mandatory scroll-smooth"
       >
         {clips.map((clip, index) => (
-          <ReelCard key={clip._id} clip={clip} index={index} />
+          <ReelCard 
+            key={clip._id} 
+            clip={clip} 
+            index={index} 
+            activeAudioId={activeAudioId}
+            activeVideoId={activeVideoId}
+            onAudioToggle={handleAudioToggle}
+            onPlayToggle={handlePlayToggle}
+          />
         ))}
         
         {/* Spacer at the end for clean padding */}
