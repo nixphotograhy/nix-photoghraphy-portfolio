@@ -28,7 +28,7 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
   const displayImages = images.slice(0, 3)
 
   return (
-    <section id="stairs" ref={containerRef} className="bg-obsidian pt-24 pb-16 md:py-32 px-6 md:px-16 lg:px-24 overflow-hidden relative">
+    <section id="stairs" ref={containerRef} className="bg-obsidian pt-12 md:pt-24 pb-16 md:py-32 px-6 md:px-16 lg:px-24 overflow-hidden relative">
       <div className="max-w-7xl mx-auto flex flex-col relative">
         
         {/* Architectural Guide Line (Top to Bottom) */}

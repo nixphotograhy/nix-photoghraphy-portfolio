@@ -59,8 +59,21 @@ function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
   }
 
   const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent triggering the play/pause toggle
-    setIsMuted(!isMuted)
+    e.stopPropagation() 
+    const newMutedState = !isMuted
+    setIsMuted(newMutedState)
+    
+    // Explicit DOM binding for iOS Safari
+    if (videoRef.current) {
+      videoRef.current.muted = newMutedState
+      if (!newMutedState && isPlaying) {
+        // iOS sometimes requires play() to be explicitly called again after unmuting
+        const playPromise = videoRef.current.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => setHasError(true))
+        }
+      }
+    }
   }
 
   return (
@@ -150,7 +163,7 @@ export default function CinematicNarrative({ clips = [] }: CinematicNarrativePro
   if (!clips || clips.length === 0) return null
 
   return (
-    <section id="reels" className="bg-obsidian pt-16 pb-32 px-0 overflow-hidden relative scroll-mt-20 md:scroll-mt-28">
+    <section id="reels" className="bg-obsidian pt-16 pb-16 md:pb-32 px-0 overflow-hidden relative scroll-mt-20 md:scroll-mt-28">
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-forest-deep/10 rounded-full blur-[120px] pointer-events-none" />
       
