@@ -22,7 +22,15 @@ interface CinematicNarrativeProps {
 function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
   const [hasError, setHasError] = useState(false)
+
+  // Sync muted state with video element
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted
+    }
+  }, [isMuted])
 
   const handleMouseEnter = () => {
     if (typeof window !== 'undefined' && window.innerWidth > 768) {
@@ -48,6 +56,11 @@ function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
       videoRef.current?.play().catch(() => setHasError(true))
       setIsPlaying(true)
     }
+  }
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent triggering the play/pause toggle
+    setIsMuted(!isMuted)
   }
 
   return (
@@ -92,10 +105,21 @@ function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
         ref={videoRef}
         src={clip.videoUrl}
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
-        muted
         loop
         playsInline
       />
+
+      {/* Volume Toggle HUD */}
+      <button 
+        onClick={toggleMute}
+        className={`absolute top-4 right-12 z-30 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-black/60 transition-all ${isPlaying ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+      >
+        {isMuted ? (
+          <VolumeX size={16} className="text-cream" />
+        ) : (
+          <Volume2 size={16} className="text-cream" />
+        )}
+      </button>
 
       {/* Title Info Visibility on Hover or playing */}
       <div className={`absolute bottom-0 left-0 p-6 md:p-8 w-full z-20 transition-all duration-500 ${isPlaying ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100'}`}>

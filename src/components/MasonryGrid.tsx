@@ -52,7 +52,7 @@ export default function MasonryGrid({ images = [], title = "ARCHIVES", isLightbo
 
   return (
     <section id="gallery" className="bg-obsidian pt-12 pb-24 px-8 md:px-16 lg:px-24 scroll-mt-20 md:scroll-mt-28">
-      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 sm:gap-4 mb-16 border-b border-forest-light/10 pb-6 sm:pb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 sm:gap-4 mb-8 border-b border-forest-light/10 pb-6 sm:pb-8">
         <h2 className="text-5xl md:text-6xl font-serif italic text-cream leading-[1.1] md:leading-none tracking-tighter">
           {title}
         </h2>

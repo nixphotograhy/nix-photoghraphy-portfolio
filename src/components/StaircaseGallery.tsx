@@ -39,7 +39,7 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y1 }}
             viewport={{ once: true }}
-            className="relative z-10 w-[65%] md:w-[42%] self-start flex flex-col gap-4 md:gap-12 mt-12 md:mt-0"
+            className="relative z-10 w-[60%] md:w-[35%] self-start flex flex-col gap-4 md:gap-12 mt-16 md:mt-0"
           >
             <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group">
               {/* Corner Architectural Marks */}
@@ -67,7 +67,7 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y2 }}
             viewport={{ once: true }}
-            className="relative z-20 w-[65%] md:w-[42%] self-center -mt-8 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
+            className="relative z-20 w-[60%] md:w-[35%] self-center mt-4 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
           >
             <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-[0_60px_120px_rgba(0,0,0,0.6)] group">
                {/* Corner Architectural Marks */}
@@ -95,7 +95,7 @@ export default function StaircaseGallery({ images = [] }: StaircaseGalleryProps)
           <motion.div 
             style={{ y: y3 }}
             viewport={{ once: true }}
-            className="relative z-10 w-[65%] md:w-[42%] self-end -mt-8 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
+            className="relative z-10 w-[60%] md:w-[35%] self-end mt-4 md:-mt-32 lg:-mt-48 flex flex-col gap-4 md:gap-12"
           >
             <div className="relative aspect-[4/5] overflow-hidden border border-white/5 shadow-2xl group">
                {/* Corner Architectural Marks */}
