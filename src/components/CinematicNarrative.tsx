@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { urlForImage } from '@/sanity/lib/image'
-import { Play, Pause, Film, Zap } from 'lucide-react'
+import { Play, Pause, Film, Zap, Volume2, VolumeX } from 'lucide-react'
 import type { Image as SanityImage } from 'sanity'
 
 interface VideoClip {
