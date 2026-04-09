@@ -8,6 +8,7 @@ import MenuOverlay from '@/components/MenuOverlay'
 
 export const MENU_LINKS = [
   { label: 'Gallery', href: '/gallery' },
+  { label: 'Reels', href: '/#reels' },
   { label: 'About Us', href: '/#about' },
   { label: 'Contact', href: '/#contact' },
 ]

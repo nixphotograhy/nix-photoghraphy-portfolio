@@ -27,7 +27,7 @@ export default function BookingCTA({ contactInfo, socialLinks }: BookingCTAProps
   const [formData, setFormData] = useState({ name: '', email: '', type: 'wedding', details: '' })
 
   return (
-    <section id="contact" className="bg-obsidian py-16 md:py-32 px-6 md:px-16 lg:px-24 flex flex-col items-center">
+    <section id="contact" className="bg-obsidian py-16 md:py-32 px-6 md:px-16 lg:px-24 flex flex-col items-center scroll-mt-24 md:scroll-mt-32">
       <div className="w-full max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
           

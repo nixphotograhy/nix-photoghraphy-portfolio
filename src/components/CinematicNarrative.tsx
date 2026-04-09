@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { urlForImage } from '@/sanity/lib/image'
-import { Play, X, Film, Zap } from 'lucide-react'
+import { Play, Pause, Film, Zap } from 'lucide-react'
 import type { Image as SanityImage } from 'sanity'
 
 interface VideoClip {
@@ -19,19 +19,119 @@ interface CinematicNarrativeProps {
   clips: VideoClip[]
 }
 
+function ReelCard({ clip, index }: { clip: VideoClip; index: number }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
+  const handleMouseEnter = () => {
+    if (typeof window !== 'undefined' && window.innerWidth > 768) {
+      videoRef.current?.play().catch(() => setHasError(true))
+      setIsPlaying(true)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (typeof window !== 'undefined' && window.innerWidth > 768) {
+      videoRef.current?.pause()
+      if (videoRef.current) videoRef.current.currentTime = 0
+      setIsPlaying(false)
+    }
+  }
+
+  const handleToggle = (e: React.MouseEvent) => {
+    // On mobile or on click, toggle play/pause
+    if (isPlaying) {
+      videoRef.current?.pause()
+      setIsPlaying(false)
+    } else {
+      videoRef.current?.play().catch(() => setHasError(true))
+      setIsPlaying(true)
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.8 }}
+      className="flex-shrink-0 w-[85vw] md:w-[60vw] lg:w-[45vw] aspect-[16/9] group relative bg-forest-deep/20 overflow-hidden border border-white/5 shadow-2xl cursor-pointer snap-center"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleToggle}
+    >
+      {/* Fallback Image / Preview */}
+      <AnimatePresence>
+        {!isPlaying && (
+          <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-10"
+          >
+            <Image
+              src={urlForImage(clip.previewImage).url()}
+              alt={clip.title}
+              fill
+              className="object-cover grayscale-[0.4] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-obsidian/40 group-hover:bg-obsidian/20 transition-colors duration-500" />
+            
+            {/* Play Button HUD */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-cream/90 flex items-center justify-center shadow-2xl scale-90 group-hover:scale-100 transition-transform">
+                <Play size={24} className="text-obsidian fill-obsidian ml-1" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Video Element */}
+      <video
+        ref={videoRef}
+        src={clip.videoUrl}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0'}`}
+        muted
+        loop
+        playsInline
+      />
+
+      {/* Title Info Visibility on Hover or playing */}
+      <div className={`absolute bottom-0 left-0 p-6 md:p-8 w-full z-20 transition-all duration-500 ${isPlaying ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100'}`}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-[10px] uppercase font-sans tracking-[0.3em] text-forest-light mb-1">{clip.category || 'Reel'}</p>
+            <p className="text-cream font-serif italic text-xl md:text-2xl">{clip.title}</p>
+          </div>
+          {isPlaying && (
+            <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center">
+              <Pause size={16} className="text-cream" />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Architectural Detail */}
+      <div className="absolute top-4 right-4 text-[9px] font-sans tracking-widest text-white/20 z-20">
+        REEL_REF_{index + 1}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function CinematicNarrative({ clips = [] }: CinematicNarrativeProps) {
-  const [activeVideo, setActiveVideo] = useState<VideoClip | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   if (!clips || clips.length === 0) return null
 
   return (
-    <section id="reels" className="bg-obsidian py-24 md:py-32 px-6 md:px-16 overflow-hidden relative">
+    <section id="reels" className="bg-obsidian py-24 md:py-32 px-0 overflow-hidden relative scroll-mt-24 md:scroll-mt-32">
       {/* Background Ambience */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-forest-deep/10 rounded-full blur-[120px] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto">
-        <header className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-20 gap-6">
+      <div className="px-6 md:px-16 lg:px-24 mb-12 md:mb-20">
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-7xl mx-auto">
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-forest-light">
               <Film size={20} className="animate-pulse" />
@@ -45,93 +145,27 @@ export default function CinematicNarrative({ clips = [] }: CinematicNarrativePro
             Capturing the flow of time beyond the static frame. Our narrative reels are editorial-grade segments designed to evoke atmosphere and emotion.
           </p>
         </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {clips.map((clip, index) => (
-            <motion.div
-              key={clip._id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.8 }}
-              className="group relative aspect-[16/9] bg-forest-deep/20 overflow-hidden border border-white/5 shadow-2xl cursor-pointer"
-              onClick={() => setActiveVideo(clip)}
-            >
-              <Image
-                src={urlForImage(clip.previewImage).url()}
-                alt={clip.title}
-                fill
-                className="object-cover grayscale-[0.4] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-              />
-              
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-obsidian/40 group-hover:bg-obsidian/20 transition-colors duration-500" />
-              
-              {/* Play Button HUD */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="w-16 h-16 rounded-full bg-cream flex items-center justify-center shadow-2xl scale-90 group-hover:scale-100 transition-transform">
-                  <Play size={24} className="text-obsidian fill-obsidian ml-1" />
-                </div>
-              </div>
-
-              {/* Title Info */}
-              <div className="absolute bottom-0 left-0 p-6 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                <p className="text-[10px] uppercase font-sans tracking-[0.3em] text-forest-light mb-1">{clip.category || 'Reel'}</p>
-                <p className="text-cream font-serif italic text-xl">{clip.title}</p>
-              </div>
-
-              {/* Architectural Detail */}
-              <div className="absolute top-4 right-4 text-[9px] font-sans tracking-widest text-white/20">
-                CHPT_{index + 1}
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
 
-      {/* Video Modal (Theater Mode) */}
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-obsidian/95 backdrop-blur-2xl flex items-center justify-center p-4 md:p-12"
-          >
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative w-full max-w-6xl aspect-video bg-black shadow-[0_0_100px_rgba(0,0,0,0.8)] border border-white/10"
-            >
-              <button 
-                onClick={() => setActiveVideo(null)}
-                className="absolute -top-12 right-0 text-cream/60 hover:text-white flex items-center gap-2 group transition-colors"
-              >
-                <span className="text-[10px] uppercase tracking-[0.4em] font-sans">Close Studio</span>
-                <X size={20} />
-              </button>
+      {/* The Cinematic Strip: Horizontal Scrollable Container */}
+      <div 
+        ref={scrollContainerRef}
+        className="flex gap-6 md:gap-12 overflow-x-auto px-6 md:px-16 lg:px-24 pb-12 cursor-grab active:cursor-grabbing no-scrollbar snap-x snap-mandatory scroll-smooth"
+      >
+        {clips.map((clip, index) => (
+          <ReelCard key={clip._id} clip={clip} index={index} />
+        ))}
+        
+        {/* Spacer at the end for clean padding */}
+        <div className="flex-shrink-0 w-6 md:w-24 h-full" />
+      </div>
 
-              <video 
-                src={activeVideo.videoUrl} 
-                className="w-full h-full object-contain" 
-                controls 
-                autoPlay 
-              />
-              
-              <div className="absolute -bottom-16 md:-bottom-20 left-0 w-full flex justify-between items-end border-t border-white/10 pt-6">
-                <div>
-                   <h3 className="text-cream text-2xl md:text-3xl font-serif italic">{activeVideo.title}</h3>
-                   <p className="text-[10px] uppercase tracking-[0.5em] text-forest-light mt-2">{activeVideo.category || 'Editorial Narrrative'}</p>
-                </div>
-                <div className="hidden md:flex items-center gap-4 text-white/20 mb-2">
-                   <Zap size={14} />
-                   <span className="text-[8px] uppercase tracking-[0.3em]">4K Cinematic Rendering Path</span>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Visual Navigation Hint */}
+      <div className="flex justify-center mt-8 gap-2">
+        {clips.map((_, i) => (
+          <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/10" />
+        ))}
+      </div>
     </section>
   )
 }

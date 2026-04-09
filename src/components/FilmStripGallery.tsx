@@ -117,10 +117,11 @@ export default function FilmStripGallery({ images = [] }: FilmStripGalleryProps)
         </AnimatePresence>
       </motion.div>
 
-      <div className="absolute bottom-12 right-12 z-50 flex flex-col items-center gap-6">
-        <div className="w-[1px] h-24 bg-white/10 relative overflow-hidden">
-          <motion.div key={index} initial={{ height: "0%" }} animate={{ height: "100%" }} transition={{ duration: 6, ease: "linear" }} className="absolute top-0 left-0 w-full bg-cream/50" />
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4">
+        <div className="w-48 md:w-64 h-[1px] bg-white/10 relative overflow-hidden">
+          <motion.div key={index} initial={{ width: "0%" }} animate={{ width: "100%" }} transition={{ duration: 6, ease: "linear" }} className="absolute top-0 left-0 h-full bg-cream/50" />
         </div>
+        <span className="text-[7px] md:text-[8px] uppercase tracking-[0.4em] text-white/20">Archive Sequence // {index + 1} of {images.length}</span>
       </div>
 
     </section>
