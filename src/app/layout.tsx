@@ -37,7 +37,8 @@ export const metadata: Metadata = {
     creator: "@nix_photography_09",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   alternates: {
     canonical: "https://www.nixphotography.in",
